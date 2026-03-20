@@ -2,6 +2,7 @@ package com.example.apitoken.controller;
 
 import java.util.List;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
@@ -9,8 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.apitoken.dto.TaskRequest;
 import com.example.apitoken.entity.Task;
 import com.example.apitoken.service.TaskService;
+
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,8 +37,9 @@ public class TaskController {
     }
 
     @PostMapping
-    public Task createTask(@RequestBody Task task) {
-        return taskService.save(task);
+    public ResponseEntity<Task> createTask(@Valid @RequestBody TaskRequest taskRequest) {
+        Task createdTask = taskService.save(taskRequest);
+        return ResponseEntity.ok(createdTask);
     }
 
     @DeleteMapping("/{id}")

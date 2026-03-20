@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.apitoken.dto.TaskRequest;
 import com.example.apitoken.entity.Task;
 import com.example.apitoken.repository.TaskRepository;
 
@@ -18,7 +19,11 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
-    public Task save(Task task) {
+    public Task save(TaskRequest taskRequest) {
+        Task task = new Task();
+        task.setTitle(taskRequest.getTitle());
+        task.setDescription(taskRequest.getDescription());
+        task.setCompleted(taskRequest.isCompleted());
         return taskRepository.save(task);
     }
 
