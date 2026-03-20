@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.apitoken.dto.TaskRequest;
+import com.example.apitoken.dto.TaskResponse;
 import com.example.apitoken.entity.Task;
 import com.example.apitoken.service.TaskService;
 
@@ -32,7 +33,7 @@ public class TaskController {
     private TaskService taskService;
 
     @GetMapping
-    public List<Task> getAll() {
+    public List<TaskResponse> getAll() {
         return taskService.findAll();
     }
 
@@ -49,23 +50,24 @@ public class TaskController {
     }
 
     @GetMapping("/search/title")
-    public ResponseEntity<Task> getByTitle(@RequestParam String title) {
-        Task task = taskService.findByTitle(title);
-        if (task != null) {
-            return ResponseEntity.ok(task);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<TaskResponse> getByTitle(@RequestParam String title) {
+        TaskResponse taskResponse = taskService.findByTitle(title);
+        return ResponseEntity.ok(taskResponse);
     }
 
     @GetMapping("/status/{completed}")
-    public List<Task> getByStatus(@PathVariable boolean completed) {
+    public List<TaskResponse> getByStatus(@PathVariable boolean completed) {
         return taskService.findByCompleted(completed);
     }
 
     @GetMapping("/search")
-    public List<Task> searchByWord(@RequestParam String word) {
+    public List<TaskResponse> searchByWord(@RequestParam String word) {
         return taskService.findByTitleContaining(word);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TaskResponse> getById(@PathVariable Long id) {
+     return ResponseEntity.ok(taskService.findById(id));
     }
 
 }
